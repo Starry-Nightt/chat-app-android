@@ -37,7 +37,7 @@ class Utils {
 
 
         fun getReadableDateTime(date: Date): String{
-            return SimpleDateFormat("MMMM dd, yyyy - hh:mm a", Locale.getDefault()).format(date)
+            return SimpleDateFormat("dd MMMM, yyyy - hh:mm a", Locale.getDefault()).format(date)
         }
     }
 }

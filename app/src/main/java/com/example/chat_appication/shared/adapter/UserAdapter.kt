@@ -13,6 +13,9 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chat_appication.R
 import com.example.chat_appication.model.User
+import com.example.chat_appication.shared.Constants
+import com.example.chat_appication.shared.Database
+import java.util.Objects
 
 class UserAdapter(
     private val context: Context,
@@ -46,22 +49,28 @@ class UserAdapter(
         val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
         holder.avatarUser.setImageBitmap(bitmap)
         holder.username.text = item.username
-        if (item.token != null && item.token.isNotEmpty()) {
-            holder.statusUser.text = "Online"
-            holder.statusUser.setTextColor(ContextCompat.getColor(context, R.color.success))
-        } else {
-            holder.statusUser.text = "Offline"
-            holder.statusUser.setTextColor(ContextCompat.getColor(context, R.color.dim))
-        }
+
         holder.itemView.setOnClickListener {
             onClickItem?.let { act -> act(item) }
         }
+        var isOnline = false
+        Database.userCollection.document(item.id).addSnapshotListener { value, error ->
+            if (error != null) return@addSnapshotListener
+            if (value != null) {
+                if (value.getLong(Constants.KEY_AVAILABILITY) != null) {
+                    val available = Objects.requireNonNull(value.getLong(Constants.KEY_AVAILABILITY)) ?: 0
+                    isOnline = (available.toInt() == 1)
+                }
+            }
+            if (isOnline) {
+                holder.statusUser.text = "Online"
+                holder.statusUser.setTextColor(ContextCompat.getColor(context, R.color.success))
+            } else {
+                holder.statusUser.text = "Offline"
+                holder.statusUser.setTextColor(ContextCompat.getColor(context, R.color.dim))
+            }
+        }
+
+
     }
-
-
-    private fun getUserImage(encodeImage: String): Bitmap {
-        val bytes = Base64.decode(encodeImage, Base64.DEFAULT)
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-    }
-
 }

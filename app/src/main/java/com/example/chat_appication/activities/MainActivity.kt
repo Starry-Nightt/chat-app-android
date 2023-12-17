@@ -23,7 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 import java.util.Objects
 
-class MainActivity : AppCompatActivity() {
+class MainActivity :BaseActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var preferencesManager: PreferenceManager

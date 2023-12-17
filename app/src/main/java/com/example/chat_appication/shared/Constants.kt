@@ -17,5 +17,6 @@ class Constants {
         val KEY_RECEIVER_ID = "receivedId"
         val KEY_MESSAGE = "message"
         val KEY_TIME_STAMP = "timestamp"
+        val KEY_AVAILABILITY = "availability"
     }
 }

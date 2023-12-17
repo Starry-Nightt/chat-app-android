@@ -15,9 +15,12 @@
         android:theme="@style/Theme.ChatAppication"
         tools:targetApi="31">
         <activity
+            android:name=".activities.BaseActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.ChatRoom"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.RegisterActivity"
             android:exported="false" />

@@ -8,36 +8,29 @@
     <fragment
         android:id="@+id/navigation_chat"
         android:name="com.example.chat_appication.view.chat.ChatFragment"
-        android:label="@string/chat"
+        android:label="@string/chat_with_friend"
         tools:layout="@layout/fragment_chat" >
     </fragment>
 
     <fragment
         android:id="@+id/navigation_invite"
         android:name="com.example.chat_appication.view.chat.FriendInviteFragment"
-        android:label="@string/invite"
+        android:label="@string/friend_invite"
         tools:layout="@layout/fragment_friend_invite" />
 
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.chat_appication.view.profile.ProfileFragment"
-        android:label="@string/profile"
+        android:label="@string/your_profile"
         tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/navigation_users"
         android:name="com.example.chat_appication.view.users.UsersFragment"
-        android:label="@string/user_list"
+        android:label="@string/add_more_friend"
         tools:layout="@layout/fragment_users" >
         <action
             android:id="@+id/action_navigation_users_to_navigation_invite"
             app:destination="@id/navigation_invite" />
-        <action
-            android:id="@+id/action_navigation_users_to_chatRoomFragment"
-            app:destination="@id/chatRoomFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/chatRoomFragment"
-        android:name="com.example.chat_appication.view.chat_room.ChatRoomFragment"
-        android:label="ChatRoomFragment" />
 </navigation>

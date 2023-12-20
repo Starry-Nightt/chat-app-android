@@ -52,5 +52,10 @@
     <string name="type_a_message">Type a message</string>
     <string name="online">Online</string>
     <string name="offline">Offline</string>
+    <string name="add_friend">Add friend</string>
+    <string name="chat_with_friend">Chat with friend</string>
+    <string name="friend_invite">Friend Invite</string>
+    <string name="your_profile">Your Profile</string>
+    <string name="add_more_friend">Add more friend</string>
 
 </resources>

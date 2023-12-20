@@ -91,6 +91,7 @@ class MainActivity :BaseActivity() {
         val documentReference =
             Utils.database.collection(Constants.KEY_USERS_COLLECTION)
                 .document(preferencesManager.getString(Constants.KEY_USER_ID) as String)
+        preferencesManager.putString(Constants.KEY_TOKEN, token)
         documentReference.update(Constants.KEY_TOKEN, token).addOnFailureListener { e ->
             Utils.showToast(applicationContext, "Unable update token")
         }

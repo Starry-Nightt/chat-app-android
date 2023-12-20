@@ -18,7 +18,7 @@
             android:name=".activities.BaseActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ChatRoom"
+            android:name=".activities.ChatRoomActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity

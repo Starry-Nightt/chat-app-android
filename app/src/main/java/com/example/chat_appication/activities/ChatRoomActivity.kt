@@ -1,15 +1,16 @@
 package com.example.chat_appication.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Message
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.chat_appication.R
 import com.example.chat_appication.databinding.ActivityChatRoomBinding
 import com.example.chat_appication.model.ChatMessage
 import com.example.chat_appication.model.User
+import com.example.chat_appication.shared.AppClient
+import com.example.chat_appication.shared.AppService
 import com.example.chat_appication.shared.Constants
 import com.example.chat_appication.shared.Database
 import com.example.chat_appication.shared.PreferenceManager
@@ -18,10 +19,18 @@ import com.example.chat_appication.shared.adapter.ChatAdapter
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.QuerySnapshot
+import org.checkerframework.checker.nullness.qual.NonNull
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.create
 import java.util.Date
 import java.util.Objects
 
-class ChatRoom : BaseActivity() {
+class ChatRoomActivity : BaseActivity() {
     private lateinit var binding: ActivityChatRoomBinding
     private lateinit var chatUser: User
     private lateinit var preferencesManager: PreferenceManager
@@ -102,11 +111,31 @@ class ChatRoom : BaseActivity() {
         val messagesPayload = mapOf(
             Constants.KEY_SENDER_ID to preferencesManager.getString(Constants.KEY_USER_ID),
             Constants.KEY_RECEIVER_ID to chatUser.id,
-            Constants.KEY_MESSAGE to binding.chatInput.text.toString(),
+            Constants.KEY_MESSAGE to binding.chatInput.text.toString().trim(),
             Constants.KEY_TIME_STAMP to Date(),
         )
         Database.chatCollection.add(messagesPayload)
+        if (!isChatUserAvailable) {
+            try {
+                val tokens = JSONArray()
+                tokens.put(chatUser.token)
+                Log.d("token", chatUser.token)
+                val data = JSONObject()
+                data.put(Constants.KEY_USER_ID, preferencesManager.getString(Constants.KEY_USER_ID))
+                data.put(Constants.KEY_NAME, preferencesManager.getString(Constants.KEY_NAME))
+                data.put(Constants.KEY_TOKEN, preferencesManager.getString(Constants.KEY_TOKEN))
+                data.put(Constants.KEY_MESSAGE, binding.chatInput.text.toString())
+
+                val body = JSONObject()
+                body.put(Constants.REMOTE_MSG_DATA, data)
+                body.put(Constants.REMOTE_MSG_REGISTRATION_IDS, tokens)
+                sendNotification(body.toString())
+            } catch (e: JSONException) {
+                Utils.showToast(applicationContext, "Send notification failed")
+            }
+        }
         binding.chatInput.setText("")
+
     }
 
     private fun loadUser() {
@@ -116,20 +145,55 @@ class ChatRoom : BaseActivity() {
 
     }
 
+    private fun sendNotification(message: String) {
+        AppClient.getClient().create(AppService::class.java).sendMessage(
+            Constants.getRemoteMessageHeader(),
+            message
+        ).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful) {
+                    try {
+                        if (response.body() != null) {
+                            val responseJson = JSONObject(response.body())
+                            val results = responseJson.getJSONArray("results")
+                            if (responseJson.getInt("failure") == 1) {
+                                val error = results.get(0) as JSONObject
+                                Utils.showToast(applicationContext, error.getString("error"))
+                                return;
+                            }
+                        }
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                    }
+                    Utils.showToast(applicationContext, "Notification sent successfully")
+                } else {
+                    Utils.showToast(applicationContext, "Send notification failure")
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Utils.showToast(applicationContext, "Some errors occur")
+
+            }
+        })
+    }
+
     private fun listenAvailability() {
         Database.userCollection.document(chatUser.id).addSnapshotListener { value, error ->
             if (error != null) return@addSnapshotListener
             if (value != null) {
                 if (value.getLong(Constants.KEY_AVAILABILITY) != null) {
-                    val available = Objects.requireNonNull(value.getLong(Constants.KEY_AVAILABILITY)) ?: 0
+                    val available =
+                        Objects.requireNonNull(value.getLong(Constants.KEY_AVAILABILITY)) ?: 0
                     isChatUserAvailable = (available.toInt() == 1)
                 }
+                chatUser.token = value.getString(Constants.KEY_TOKEN) ?: ""
             }
             setStatus()
         }
     }
 
-    private fun setStatus(){
+    private fun setStatus() {
         if (isChatUserAvailable) {
             binding.status.text = "Online"
             binding.status.setTextColor(ContextCompat.getColor(applicationContext, R.color.success))

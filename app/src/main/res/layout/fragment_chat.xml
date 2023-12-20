@@ -4,21 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.chat.ChatFragment">
+    tools:context=".view.users.UsersFragment">
 
-    <TextView
-        android:id="@+id/text_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="20dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/user_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-</androidx.constraintlayout.widget.ConstraintLayout >
+        <ProgressBar
+            android:id="@+id/spinner_user_list"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/text_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:textAlignment="center"
+            android:textColor="@color/error"
+            android:textSize="14sp"
+            android:visibility="invisible" />
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

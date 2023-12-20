@@ -2,20 +2,17 @@ package com.example.chat_appication.view.users
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.chat_appication.activities.ChatRoom
-import com.example.chat_appication.activities.LoginActivity
+import com.example.chat_appication.activities.ChatRoomActivity
 import com.example.chat_appication.databinding.FragmentUsersBinding
 import com.example.chat_appication.model.User
 import com.example.chat_appication.shared.Constants
 import com.example.chat_appication.shared.adapter.UserAdapter
-import java.io.Serializable
 
 
 class UsersFragment : Fragment() {
@@ -52,9 +49,7 @@ class UsersFragment : Fragment() {
         viewModel.users.observe(viewLifecycleOwner) { it ->
             if (it != null) {
                 if (it.size > 0) {
-                    val adapter = UserAdapter(requireContext(), it){
-                        chatToUser(it)
-                    }
+                    val adapter = UserAdapter(it)
                     binding.userList.adapter = adapter
                     binding.userList.visibility = View.VISIBLE
                     hideMessage()
@@ -91,9 +86,4 @@ class UsersFragment : Fragment() {
         binding.textMessage.visibility = View.GONE
     }
 
-    private fun chatToUser(user: User){
-        val intent = Intent(requireContext(), ChatRoom::class.java)
-        intent.putExtra(Constants.KEY_CHAT_USER, user)
-        startActivity(intent)
-    }
 }

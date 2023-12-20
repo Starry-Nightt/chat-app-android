@@ -7,7 +7,7 @@
     android:padding="10dp">
 
     <com.makeramen.roundedimageview.RoundedImageView
-        android:id="@+id/avatar_user_item"
+        android:id="@+id/avatar_chat_user_item"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_gravity="center"
@@ -24,26 +24,21 @@
         android:paddingLeft="20dp">
 
         <TextView
-            android:id="@+id/username_user_item"
+            android:id="@+id/username_chat_user_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             android:text="Username"
             android:textFontWeight="600"
             android:textSize="20sp" />
-    </LinearLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/go_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:text="@string/add_friend"
-        android:textAllCaps="true"
-        android:textSize="12sp"
-        android:layout_marginRight="8dp"
-        app:cornerRadius="4dp" />
+        <TextView
+            android:id="@+id/chat_user_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Offline"
+            android:textColor="@color/dim"
+            android:textSize="14sp" />
+    </LinearLayout>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

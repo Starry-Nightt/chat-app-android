@@ -7,7 +7,7 @@
     android:padding="10dp">
 
     <com.makeramen.roundedimageview.RoundedImageView
-        android:id="@+id/avatar_user_item"
+        android:id="@+id/avatar_invite_item"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_gravity="center"
@@ -24,7 +24,7 @@
         android:paddingLeft="20dp">
 
         <TextView
-            android:id="@+id/username_user_item"
+            android:id="@+id/username_invite_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
@@ -33,17 +33,33 @@
             android:textSize="20sp" />
     </LinearLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/go_button"
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:text="@string/add_friend"
-        android:textAllCaps="true"
-        android:textSize="12sp"
-        android:layout_marginRight="8dp"
-        app:cornerRadius="4dp" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal">
 
+        <ImageButton
+            android:id="@+id/check_invite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="8dp"
+            android:src="@drawable/ic_check"
+            app:tint="@color/success"
+            android:layout_marginRight="8dp"/>
+
+        <!-- Icon Button for Delete -->
+        <ImageButton
+            android:id="@+id/delete_invite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="8dp"
+            android:src="@drawable/ic_remove"
+            app:tint="@color/error" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.appcompat.widget.LinearLayoutCompat>

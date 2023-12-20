@@ -1,46 +1,42 @@
 package com.example.chat_appication.shared.adapter
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chat_appication.R
 import com.example.chat_appication.model.User
-import com.example.chat_appication.shared.Constants
-import com.example.chat_appication.shared.Database
-import java.util.Objects
 
-class UserAdapter(
+class InviteAdapter (
     private val users: List<User>,
 ) :
-    RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
+    RecyclerView.Adapter<InviteAdapter.InviteViewHolder>() {
 
-    class UserViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-        val username: TextView = view.findViewById(R.id.username_user_item)
+    class InviteViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+        val username: TextView = view.findViewById(R.id.username_invite_item)
         val avatarUser: com.makeramen.roundedimageview.RoundedImageView =
-            view.findViewById(R.id.avatar_user_item)
-
+            view.findViewById(R.id.avatar_invite_item)
+        val checkButton: ImageButton = view.findViewById(R.id.check_invite)
+        val deleteButton: ImageButton = view.findViewById(R.id.delete_invite)
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InviteViewHolder {
         val adapterLayout =
-            LayoutInflater.from(parent.context).inflate(R.layout.user_list_item, parent, false)
-        return UserViewHolder(adapterLayout)
+            LayoutInflater.from(parent.context).inflate(R.layout.invite_list_item, parent, false)
+        return InviteViewHolder(adapterLayout)
     }
 
     override fun getItemCount(): Int {
         return users.size
     }
 
-    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: InviteViewHolder, position: Int) {
         val item = users[position]
         val bytes = Base64.decode(item.avatar, Base64.DEFAULT)
         val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)

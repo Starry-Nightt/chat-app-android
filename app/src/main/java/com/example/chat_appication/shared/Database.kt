@@ -8,4 +8,6 @@ object Database {
     val userCollection = instance.collection(Constants.KEY_USERS_COLLECTION)
 
     val chatCollection = instance.collection(Constants.KEY_CHAT_COLLECTION)
+
+    val friendshipCollection = instance.collection(Constants.KEY_FRIENDSHIP_COLLECTION)
 }

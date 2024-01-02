@@ -1,28 +1,29 @@
 package com.example.chat_appication.shared.adapter
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chat_appication.R
-import com.example.chat_appication.model.ChatMessage
 import com.example.chat_appication.model.User
 import com.example.chat_appication.shared.Constants
 import com.example.chat_appication.shared.Database
-import com.makeramen.roundedimageview.RoundedImageView
 import java.util.Objects
 
-class ChatUserAdapter (
+class ChatUserAdapter(
     private val context: Context,
     private val users: List<User>,
-    private val onClickItem: ((user: User) -> Unit)? = null
-) :
+    private val handleDeleteFriend: (user: User, callback: () -> Unit) -> Unit,
+    private val onClickItem: ((user: User) -> Unit)? = null,
+
+    ) :
     RecyclerView.Adapter<ChatUserAdapter.ChatUserViewHolder>() {
 
     class ChatUserViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
@@ -30,8 +31,8 @@ class ChatUserAdapter (
         val statusUser: TextView = view.findViewById(R.id.chat_user_status)
         val avatarUser: com.makeramen.roundedimageview.RoundedImageView =
             view.findViewById(R.id.avatar_chat_user_item)
-
-
+        val deleteUserButton: ImageButton = view.findViewById(R.id.delete_friend_button)
+        val container: LinearLayoutCompat = view.findViewById(R.id.chat_user_container)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatUserViewHolder {
@@ -50,7 +51,11 @@ class ChatUserAdapter (
         val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
         holder.avatarUser.setImageBitmap(bitmap)
         holder.username.text = item.username
-
+        holder.deleteUserButton.setOnClickListener {
+            handleDeleteFriend(item){
+                onInvisible(holder)
+            }
+        }
         holder.itemView.setOnClickListener {
             onClickItem?.let { act -> act(item) }
         }
@@ -59,7 +64,8 @@ class ChatUserAdapter (
             if (error != null) return@addSnapshotListener
             if (value != null) {
                 if (value.getLong(Constants.KEY_AVAILABILITY) != null) {
-                    val available = Objects.requireNonNull(value.getLong(Constants.KEY_AVAILABILITY)) ?: 0
+                    val available =
+                        Objects.requireNonNull(value.getLong(Constants.KEY_AVAILABILITY)) ?: 0
                     isOnline = (available.toInt() == 1)
                 }
             }
@@ -71,5 +77,9 @@ class ChatUserAdapter (
                 holder.statusUser.setTextColor(ContextCompat.getColor(context, R.color.dim))
             }
         }
+    }
+
+    private fun onInvisible(holder:ChatUserViewHolder){
+        holder.container.visibility = View.GONE
     }
 }

@@ -23,6 +23,7 @@
     <string name="logout">Logout</string>
     <string name="logout_title">Logout account ?</string>
     <string name="logout_message">Are you sure you want to logout?</string>
+    <string name="delete_friend_message">Are you sure you want to delete this friend?</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="required_email">Email is required</string>

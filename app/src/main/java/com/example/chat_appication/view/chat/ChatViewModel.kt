@@ -5,10 +5,17 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.chat_appication.model.FriendShipStatus
 import com.example.chat_appication.model.User
 import com.example.chat_appication.shared.Constants
+import com.example.chat_appication.shared.Database
 import com.example.chat_appication.shared.PreferenceManager
 import com.example.chat_appication.shared.Utils
+import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class ChatViewModel(application: Application) : AndroidViewModel(application) {
     private var _users = MutableLiveData<MutableList<User>>()
@@ -17,9 +24,10 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
     private var _message = MutableLiveData<String>("")
     val message: LiveData<String> get() = _message
     private val preferenceManager = PreferenceManager(application)
+    private val friendIds = mutableSetOf<String>()
 
     init {
-        getUsers()
+       refreshData()
     }
 
     private fun getUsers() {
@@ -30,6 +38,7 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
                 val usersTmp = mutableListOf<User>()
                 for (document in it.result) {
                     if (document.id == currentUserId) continue
+                    if (!friendIds.contains(document.id)) continue
                     val name = document.getString(Constants.KEY_NAME) as String
                     val avatar = document.getString(Constants.KEY_AVATAR) ?: ""
                     val email = document.getString(Constants.KEY_EMAIL) as String
@@ -45,12 +54,36 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
 
                 }
                 _users.value = usersTmp
-                if (usersTmp.size == 0) {
-                    _message.value = "No data"
-                }
             } else {
                 _message.value = "Some error occur. Try again!"
             }
         }
+    }
+
+    fun refreshData(){
+        friendIds.clear()
+        viewModelScope.launch {
+            async {
+                Utils.fetchFriendUser1(preferenceManager.getString(Constants.KEY_USER_ID) as String) {
+                    for (document in it) {
+                        val friendsId: String = document.get(Constants.KEY_RECEIVER_INVITE_ID) as String
+                        friendIds.add(friendsId)
+                    }
+                }
+            }.await()
+            async {
+                Utils.fetchFriendUser2(preferenceManager.getString(Constants.KEY_USER_ID) as String) {
+                    for (document in it) {
+                        val friendsId: String = document.get(Constants.KEY_SENDER_INVITE_ID) as String
+                        friendIds.add(friendsId)
+                    }
+                    getUsers()
+                }
+            }.await()
+        }
+    }
+
+    fun removeFriend(user: User){
+        friendIds.remove(user.id)
     }
 }

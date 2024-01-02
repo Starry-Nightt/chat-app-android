@@ -10,6 +10,7 @@ class Constants {
         val KEY_IS_SIGN_IN = "isSignedIn"
         val KEY_USER_ID = "userId"
         val KEY_AVATAR = "avatar"
+        val KEY_INVITED_USER_IDS = "invited_user_ids"
         val KEY_TOKEN = "token"
         val KEY_CHAT_USER = "chat_user"
         val KEY_CHAT_COLLECTION = "chat"
@@ -23,6 +24,11 @@ class Constants {
         val REMOTE_MSG_DATA = "data"
         val REMOTE_MSG_REGISTRATION_IDS = "registration_ids"
         val KEY_USER = "user"
+
+        val KEY_FRIENDSHIP_COLLECTION = "friendship"
+        val KEY_SENDER_INVITE_ID = "senderId"
+        val KEY_RECEIVER_INVITE_ID = "receiverId"
+        val KEY_FRIENDSHIP_STATUS = "status"
 
         private var remoteMessageHeader: Map<String, String>? = null
 

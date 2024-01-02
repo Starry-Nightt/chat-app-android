@@ -8,6 +8,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import android.util.Base64
+import com.example.chat_appication.model.FriendShipStatus
+import com.google.firebase.firestore.QuerySnapshot
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -23,11 +25,12 @@ class Utils {
         fun encodeImage(bitmap: Bitmap): String {
             val previewWidth = 150
             val previewHeight = bitmap.height * previewWidth / bitmap.width
-            val previewBitmap = Bitmap.createScaledBitmap(bitmap, previewWidth, previewHeight, false)
+            val previewBitmap =
+                Bitmap.createScaledBitmap(bitmap, previewWidth, previewHeight, false)
             val byteArrayOutput = ByteArrayOutputStream()
             previewBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutput)
             val bytes = byteArrayOutput.toByteArray()
-            return  Base64.encodeToString(bytes, Base64.DEFAULT)
+            return Base64.encodeToString(bytes, Base64.DEFAULT)
         }
 
         fun decodeImage(image: String): Bitmap {
@@ -36,8 +39,56 @@ class Utils {
         }
 
 
-        fun getReadableDateTime(date: Date): String{
+        fun getReadableDateTime(date: Date): String {
             return SimpleDateFormat("dd MMMM, yyyy - hh:mm a", Locale.getDefault()).format(date)
+        }
+
+        suspend fun fetchInvitedUser(
+            currentUserId: String,
+            callback: (data: QuerySnapshot) -> Unit
+        ) {
+            Utils.database.collection(Constants.KEY_FRIENDSHIP_COLLECTION)
+                .whereEqualTo(Constants.KEY_SENDER_INVITE_ID, currentUserId)
+                .whereEqualTo(Constants.KEY_FRIENDSHIP_STATUS, FriendShipStatus.SENDING).get()
+                .addOnSuccessListener {
+                    callback(it)
+                }
+        }
+
+        suspend fun fetchSendInvitedUser(
+            currentUserId: String,
+            callback: (data: QuerySnapshot) -> Unit
+        ) {
+            Utils.database.collection(Constants.KEY_FRIENDSHIP_COLLECTION)
+                .whereEqualTo(Constants.KEY_RECEIVER_INVITE_ID, currentUserId)
+                .whereEqualTo(Constants.KEY_FRIENDSHIP_STATUS, FriendShipStatus.SENDING).get()
+                .addOnSuccessListener {
+                    callback(it)
+                }
+        }
+
+        suspend fun fetchFriendUser1(
+            currentUserId: String,
+            callback: (data: QuerySnapshot) -> Unit
+        ) {
+            Database.friendshipCollection
+                .whereEqualTo(Constants.KEY_SENDER_INVITE_ID, currentUserId)
+                .whereEqualTo(Constants.KEY_FRIENDSHIP_STATUS, FriendShipStatus.ACCEPTED).get()
+                .addOnSuccessListener {
+                    callback(it)
+                }
+        }
+
+        suspend fun fetchFriendUser2(
+            currentUserId: String,
+            callback: (data: QuerySnapshot) -> Unit
+        ) {
+            Database.friendshipCollection
+                .whereEqualTo(Constants.KEY_RECEIVER_INVITE_ID, currentUserId)
+                .whereEqualTo(Constants.KEY_FRIENDSHIP_STATUS, FriendShipStatus.ACCEPTED).get()
+                .addOnSuccessListener {
+                    callback(it)
+                }
         }
     }
 }

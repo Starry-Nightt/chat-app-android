@@ -9,8 +9,7 @@
         android:id="@+id/navigation_chat"
         android:name="com.example.chat_appication.view.chat.ChatFragment"
         android:label="@string/chat_with_friend"
-        tools:layout="@layout/fragment_chat" >
-    </fragment>
+        tools:layout="@layout/fragment_chat" />
 
     <fragment
         android:id="@+id/navigation_invite"
@@ -33,4 +32,20 @@
             android:id="@+id/action_navigation_users_to_navigation_invite"
             app:destination="@id/navigation_invite" />
     </fragment>
+    <fragment
+        android:id="@+id/navigation_chat_group"
+        android:name="com.example.chat_appication.view.chat_group.ChatGroupFragment"
+        android:label="@string/group"
+        tools:layout="@layout/fragment_chat_group"
+        >
+        <action
+            android:id="@+id/action_navigation_chat_group_to_chatGroupCreateFragment"
+            app:destination="@id/chatGroupCreateFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatGroupCreateFragment"
+        android:name="com.example.chat_appication.view.chat_group_create.ChatGroupCreateFragment"
+        android:label="@string/create_group" />
+
+
 </navigation>

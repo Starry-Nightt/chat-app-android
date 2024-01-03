@@ -30,6 +30,22 @@ class Constants {
         val KEY_RECEIVER_INVITE_ID = "receiverId"
         val KEY_FRIENDSHIP_STATUS = "status"
 
+        val KEY_GROUP_COLLECTION = "group"
+        val KEY_GROUP_NAME ="groupName"
+        val KEY_GROUP_MEMBER_IDS = "memberIds"
+        val KEY_GROUP_INFO = "groupInfo"
+        val KEY_GROUP_ID = "groupId"
+        val KEY_GROUP_IMAGE="groupImage"
+
+
+        val KEY_CHAT_GROUP_MESSAGE_COLLECTION = "chatGroupMessage"
+        val KEY_CHAT_GROUP_SENDER_ID = "senderId"
+        val KEY_CHAT_GROUP_GROUP_RECEIVER_ID = "receiverGroupId"
+        val KEY_CHAT_GROUP_MEMBER_IDS = "memberIds"
+        val KEY_CHAT_GROUP_MESSAGE = "message"
+        val KEY_CHAT_GROUP_TIME_STAMP = "timestamp"
+
+
         private var remoteMessageHeader: Map<String, String>? = null
 
         fun getRemoteMessageHeader(): Map<String, String> {

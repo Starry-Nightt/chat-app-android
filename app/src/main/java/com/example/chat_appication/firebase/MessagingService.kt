@@ -41,7 +41,7 @@ class MessagingService: FirebaseMessagingService() {
         val channelId = "chat_message"
 
         val intent = Intent(this, ChatRoomActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or  Intent.FLAG_ACTIVITY_CLEAR_TASK
         intent.putExtra(Constants.KEY_USER, userData)
 
         val pendingIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_IMMUTABLE)

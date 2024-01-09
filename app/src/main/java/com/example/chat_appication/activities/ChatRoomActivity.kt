@@ -165,7 +165,6 @@ class ChatRoomActivity : BaseActivity() {
                     } catch (e: JSONException) {
                         e.printStackTrace()
                     }
-                    Utils.showToast(applicationContext, "Notification sent successfully")
                 } else {
                     Utils.showToast(applicationContext, "Send notification failure")
                 }

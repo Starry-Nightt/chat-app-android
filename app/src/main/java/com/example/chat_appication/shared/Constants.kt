@@ -37,7 +37,6 @@ class Constants {
         val KEY_GROUP_ID = "groupId"
         val KEY_GROUP_IMAGE="groupImage"
 
-
         val KEY_CHAT_GROUP_MESSAGE_COLLECTION = "chatGroupMessage"
         val KEY_CHAT_GROUP_SENDER_ID = "senderId"
         val KEY_CHAT_GROUP_GROUP_RECEIVER_ID = "receiverGroupId"

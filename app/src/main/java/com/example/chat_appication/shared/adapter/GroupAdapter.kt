@@ -26,6 +26,7 @@ class GroupAdapter(
         val groupName: TextView = view.findViewById(R.id.group_name)
         val leaveButton: Button = view.findViewById(R.id.leave_button)
         val container: LinearLayoutCompat = view.findViewById(R.id.group_item_container)
+        val groupImage: com.makeramen.roundedimageview.RoundedImageView = view.findViewById(R.id.avatar_group_item)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupAdapter.GroupViewHolder {
@@ -37,11 +38,18 @@ class GroupAdapter(
     override fun onBindViewHolder(holder: GroupViewHolder, position: Int) {
         val item = groups[position]
         holder.groupName.text = item.name
+
+        if (item.groupImage != null && item.groupImage.trim().isNotEmpty()){
+            holder.groupImage.setImageBitmap(Utils.decodeImage(item.groupImage))
+        }
+
         holder.leaveButton.setOnClickListener {
             handleLeave(item){
                 onInvisible(holder)
             }
         }
+
+
         holder.itemView.setOnClickListener {
             onClickItem?.let { act -> act(item) }
         }

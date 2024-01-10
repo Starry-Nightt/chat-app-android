@@ -47,7 +47,7 @@ class ChatGroupRoomActivity : BaseActivity() {
         loadData()
     }
 
-    fun init(){
+    fun init() {
         Log.d("User", userList.size.toString())
         chatGroupAdapter = ChatGroupAdapter(
             chatMessages,
@@ -60,6 +60,10 @@ class ChatGroupRoomActivity : BaseActivity() {
     private fun loadData() {
         groupInfo = intent.getSerializableExtra(Constants.KEY_GROUP_INFO) as Group
         binding.groupnameText.text = groupInfo.name.toString()
+        if (groupInfo.groupImage != null) {
+            if (groupInfo.groupImage!!.isNotEmpty())
+                binding.imageGroup.setImageBitmap(Utils.decodeImage(groupInfo.groupImage!!))
+        }
         val memberIds = groupInfo.memberIds
 
 
@@ -111,12 +115,15 @@ class ChatGroupRoomActivity : BaseActivity() {
             val count = chatMessages.size
             for (documentChange in value.documentChanges) {
                 if (documentChange.type == DocumentChange.Type.ADDED) {
-                    val dateTmp = documentChange.document.getDate(Constants.KEY_CHAT_GROUP_TIME_STAMP) as Date
-                    val memberIdsField = documentChange.document.get(Constants.KEY_CHAT_GROUP_MEMBER_IDS)
+                    val dateTmp =
+                        documentChange.document.getDate(Constants.KEY_CHAT_GROUP_TIME_STAMP) as Date
+                    val memberIdsField =
+                        documentChange.document.get(Constants.KEY_CHAT_GROUP_MEMBER_IDS)
                     if (memberIdsField is List<*>) {
                         val memberIds = memberIdsField.mapNotNull { it as? String }
                         val chatMessage = ChatGroupMessage(
-                            senderId = documentChange.document.getString(Constants.KEY_CHAT_GROUP_SENDER_ID) ?: "",
+                            senderId = documentChange.document.getString(Constants.KEY_CHAT_GROUP_SENDER_ID)
+                                ?: "",
                             memberIds = memberIds,
                             message = documentChange.document.getString(Constants.KEY_CHAT_GROUP_MESSAGE) as String,
                             dateTime = Utils.getReadableDateTime(dateTmp),

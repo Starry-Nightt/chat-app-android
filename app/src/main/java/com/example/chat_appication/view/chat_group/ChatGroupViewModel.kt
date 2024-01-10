@@ -32,13 +32,15 @@ class ChatGroupViewModel(application:Application) : AndroidViewModel(application
                 for (document in it.result) {
                     val name = document.getString(Constants.KEY_GROUP_NAME) as String
                     val memberIdsField = document.get(Constants.KEY_GROUP_MEMBER_IDS)
+                    val groupImage = document.getString(Constants.KEY_GROUP_IMAGE) ?: null as String?
                     if (memberIdsField is List<*>) {
                         val memberIds = memberIdsField.mapNotNull { it as? String }
                         if (!memberIds.contains(currentUserId)) continue
                         val groupTmp = Group(
                             name = name,
                             memberIds= memberIds.toList(),
-                            id = document.id
+                            id = document.id,
+                            groupImage = groupImage
                         )
                         usersTmp.add(groupTmp)
                     }
